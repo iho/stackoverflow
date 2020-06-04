@@ -12,7 +12,7 @@ class QuestionSerializer(serializers.ModelSerializer):
             'text',
             'created',
             'updated',
-            'owner', 
+            'user', 
             'raiting', 
         )
 
@@ -36,7 +36,7 @@ class AnswerSerializer(serializers.ModelSerializer):
             'text',
             'created',
             'updated',
-            'owner', 
+            'user', 
             'raiting', 
         )
 

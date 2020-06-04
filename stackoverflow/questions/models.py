@@ -45,7 +45,7 @@ class Question(models.Model):
     updated = models.DateTimeField(verbose_name=_('Updated'), auto_now=True)
     created = models.DateTimeField(verbose_name=_('Crated'), auto_now_add=True)
     user = models.ForeignKey(User, verbose_name=_('Owner'), on_delete=models.CASCADE)
-    raiting = models.PositiveIntegerField(_('Plus'), default=0)
+    raiting = models.PositiveIntegerField(_('Raiting'), default=0)
     voters = models.ManyToManyField(User, verbose_name=_('Voted'), related_name='voted_questions', through='QuestionVote')
     category = models.ForeignKey(Category, verbose_name=_('Category'), blank=False, null=True, on_delete=models.SET_NULL)
 
@@ -80,7 +80,7 @@ class Answer(models.Model):
     created = models.DateTimeField(verbose_name=_('Crated'), auto_now_add=True)
     user = models.ForeignKey(User, blank=False, verbose_name=_('User'), on_delete=models.CASCADE)
     voters = models.ManyToManyField(User, verbose_name=_('Voted'), related_name='voted_answers', through='AnswerVote')
-    raiting = models.PositiveIntegerField(_('Plus'), default=0)
+    raiting = models.PositiveIntegerField(_('Raiting'), default=0)
 
     def __str__(self):
         return str(self.created)
