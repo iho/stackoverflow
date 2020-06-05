@@ -16,7 +16,7 @@ class Category(models.Model):
 
     class Meta:
         verbose_name = _('Category')
-        verbose_name_plural = _('Categorys')
+        verbose_name_plural = _('Categories')
 
     def __str__(self):
         return self.name
