@@ -10,6 +10,7 @@ User = get_user_model()
 class Category(models.Model):
     name = models.CharField(max_length=80, unique=True)
     slug = models.SlugField(_('Slug'), max_length=60, unique=True)
+    description = models.TextField()
 
     def get_absolute_url(self):
         return reverse('cat', args=[str(self.slug)])

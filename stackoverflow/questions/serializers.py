@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from questions.models import Question, Answer, AnswerVote, QuestionVote
+from questions.models import Question, Answer, AnswerVote, QuestionVote, Category
 
 class QuestionSerializer(serializers.ModelSerializer):
     class Meta:
@@ -14,6 +14,7 @@ class QuestionSerializer(serializers.ModelSerializer):
             'updated',
             'user', 
             'raiting', 
+            'category',
         )
 
 
@@ -49,3 +50,8 @@ class AnswerVoteSerializer(serializers.ModelSerializer):
             'answer',
             'raiting',
         )
+
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = ('id', 'name', 'slug', 'description')

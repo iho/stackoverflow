@@ -12,6 +12,8 @@ router.register(r'question_votes', QuestionVoteViewSet)
 router.register(r'anwers', AnswerViewSet)
 router.register(r'answer_votes', AnswerVoteViewSet)
 
+router.register(r'categories', CategoryViewSet)
+
 
 urlpatterns = [
     path('', include(router.urls))

@@ -12,6 +12,7 @@ django-rest-knox = "^4.1.0"
 psycopg2-binary = "^2.8.5"
 pillow = "^7.1.2"
 djoser = "^2.0.3"
+django-filter = "^2.3.0"
 
 [tool.poetry.dev-dependencies]
 django-extensions = "^2.2.9"
