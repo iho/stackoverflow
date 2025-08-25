@@ -3,7 +3,7 @@ package dev.horobets.stackoverflow.web;
 import dev.horobets.stackoverflow.model.user.User;
 import dev.horobets.stackoverflow.repository.UserRepository;
 import dev.horobets.stackoverflow.web.dto.UserProfileResponse;
-import org.springframework.core.convert.ConversionService;
+import dev.horobets.stackoverflow.web.assembler.UserProfileAssembler;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,18 +17,18 @@ import org.springframework.web.server.ResponseStatusException;
 public class UserController {
 
     private final UserRepository userRepository;
-    private final ConversionService conversionService;
+    private final UserProfileAssembler userProfileAssembler;
 
-    public UserController(UserRepository userRepository, ConversionService conversionService) {
+    public UserController(UserRepository userRepository, UserProfileAssembler userProfileAssembler) {
         this.userRepository = userRepository;
-        this.conversionService = conversionService;
+        this.userProfileAssembler = userProfileAssembler;
     }
 
     @GetMapping("/{username}")
     public ResponseEntity<UserProfileResponse> getProfile(@PathVariable String username) {
         User user = userRepository.findWithRolesByUsername(username)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
-        UserProfileResponse body = conversionService.convert(user, UserProfileResponse.class);
+        UserProfileResponse body = userProfileAssembler.toProfile(user);
         return ResponseEntity.ok(body);
     }
 }

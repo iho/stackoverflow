@@ -8,40 +8,40 @@ import dev.horobets.stackoverflow.web.dto.CommentResponse;
 import jakarta.validation.Valid;
 import java.net.URI;
 import java.util.List;
-import org.springframework.core.convert.ConversionService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import dev.horobets.stackoverflow.web.mapper.CommentMapper;
 
 @RestController
 @RequestMapping("/api")
 public class CommentController {
 
     private final CommentService commentService;
-    private final ConversionService conversionService;
+    private final CommentMapper commentMapper;
 
-    public CommentController(CommentService commentService, ConversionService conversionService) {
+    public CommentController(CommentService commentService, CommentMapper commentMapper) {
         this.commentService = commentService;
-        this.conversionService = conversionService;
+        this.commentMapper = commentMapper;
     }
 
     @GetMapping("/questions/{questionId}/comments")
     public ResponseEntity<List<CommentResponse>> listForQuestion(@PathVariable Long questionId) {
         List<Comment> list = commentService.list(PostType.QUESTION, questionId);
-        return ResponseEntity.ok(list.stream().map(c -> conversionService.convert(c, CommentResponse.class)).toList());
+        return ResponseEntity.ok(list.stream().map(commentMapper::toResponse).toList());
     }
 
     @GetMapping("/answers/{answerId}/comments")
     public ResponseEntity<List<CommentResponse>> listForAnswer(@PathVariable Long answerId) {
         List<Comment> list = commentService.list(PostType.ANSWER, answerId);
-        return ResponseEntity.ok(list.stream().map(c -> conversionService.convert(c, CommentResponse.class)).toList());
+        return ResponseEntity.ok(list.stream().map(commentMapper::toResponse).toList());
     }
 
     @GetMapping("/comments/{id}")
     public ResponseEntity<CommentResponse> get(@PathVariable Long id) {
         Comment c = commentService.getById(id);
-        return ResponseEntity.ok(conversionService.convert(c, CommentResponse.class));
+        return ResponseEntity.ok(commentMapper.toResponse(c));
     }
 
     @PostMapping("/questions/{questionId}/comments")
@@ -49,7 +49,7 @@ public class CommentController {
                                                              @RequestBody @Valid CommentRequest request,
                                                              @AuthenticationPrincipal UserDetails principal) {
         Comment c = commentService.createForQuestion(questionId, request, principal.getUsername());
-        CommentResponse body = conversionService.convert(c, CommentResponse.class);
+        CommentResponse body = commentMapper.toResponse(c);
         return ResponseEntity.created(URI.create("/api/comments/" + c.getId())).body(body);
     }
 
@@ -58,7 +58,7 @@ public class CommentController {
                                                            @RequestBody @Valid CommentRequest request,
                                                            @AuthenticationPrincipal UserDetails principal) {
         Comment c = commentService.createForAnswer(answerId, request, principal.getUsername());
-        CommentResponse body = conversionService.convert(c, CommentResponse.class);
+        CommentResponse body = commentMapper.toResponse(c);
         return ResponseEntity.created(URI.create("/api/comments/" + c.getId())).body(body);
     }
 
@@ -67,7 +67,7 @@ public class CommentController {
                                                   @RequestBody @Valid CommentRequest request,
                                                   @AuthenticationPrincipal UserDetails principal) {
         Comment c = commentService.update(id, request, principal.getUsername());
-        return ResponseEntity.ok(conversionService.convert(c, CommentResponse.class));
+        return ResponseEntity.ok(commentMapper.toResponse(c));
     }
 
     @DeleteMapping("/comments/{id}")
@@ -77,4 +77,3 @@ public class CommentController {
         return ResponseEntity.noContent().build();
     }
 }
-
