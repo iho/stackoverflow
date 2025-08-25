@@ -1,0 +1,3 @@
+CREATE DATABASE spring_db;
+CREATE USER spring_user WITH ENCRYPTED PASSWORD 'password';
+GRANT ALL PRIVILEGES ON DATABASE spring_db TO spring_user;

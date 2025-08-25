@@ -1,0 +1,22 @@
+services:
+  database:
+    container_name: postgres-spring
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: spring_user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: spring_db
+      TZ: 'Europe/Kyiv'
+      PGTZ: 'Europe/Kyiv'
+    ports:
+      - "15543:5432"
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - spring-network
+    restart:
+      unless-stopped
+networks:
+  spring-network:
+    driver: bridge
