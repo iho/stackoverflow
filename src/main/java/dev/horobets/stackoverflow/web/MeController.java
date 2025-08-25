@@ -3,9 +3,7 @@ package dev.horobets.stackoverflow.web;
 import dev.horobets.stackoverflow.model.user.User;
 import dev.horobets.stackoverflow.repository.UserRepository;
 import dev.horobets.stackoverflow.web.dto.MeResponse;
-import java.security.Principal;
-import java.util.Set;
-import java.util.stream.Collectors;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -20,9 +18,11 @@ import org.springframework.web.server.ResponseStatusException;
 public class MeController {
 
     private final UserRepository userRepository;
+    private final ConversionService conversionService;
 
-    public MeController(UserRepository userRepository) {
+    public MeController(UserRepository userRepository, ConversionService conversionService) {
         this.userRepository = userRepository;
+        this.conversionService = conversionService;
     }
 
     @GetMapping("/me")
@@ -30,19 +30,9 @@ public class MeController {
         if (principal == null) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unauthorized");
         }
-        User user = userRepository.findByUsername(principal.getUsername())
+        User user = userRepository.findWithRolesByUsername(principal.getUsername())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
-        Set<String> roles = user.getRoles().stream()
-                .map(r -> r.getName().name())
-                .collect(Collectors.toSet());
-        MeResponse body = new MeResponse(
-                user.getUsername(),
-                user.getEmail(),
-                user.getReputation(),
-                roles,
-                user.getCreatedAt()
-        );
+        MeResponse body = conversionService.convert(user, MeResponse.class);
         return ResponseEntity.ok(body);
     }
 }
-

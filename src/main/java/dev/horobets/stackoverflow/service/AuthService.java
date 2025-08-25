@@ -48,31 +48,31 @@ public class AuthService {
 
     @Transactional
     public AuthResponse register(RegisterRequest request) {
-        if (userRepository.existsByUsername(request.getUsername())) {
+        if (userRepository.existsByUsername(request.username())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Username already taken");
         }
-        if (userRepository.existsByEmail(request.getEmail())) {
+        if (userRepository.existsByEmail(request.email())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already in use");
         }
         Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "ROLE_USER missing"));
 
         User user = new User();
-        user.setUsername(request.getUsername());
-        user.setEmail(request.getEmail());
-        user.setPasswordHash(passwordEncoder.encode(request.getPassword()));
+        user.setUsername(request.username());
+        user.setEmail(request.email());
+        user.setPasswordHash(passwordEncoder.encode(request.password()));
         user.setRoles(Set.of(userRole));
         userRepository.save(user);
 
         UserDetails details = userDetailsService.loadUserByUsername(user.getUsername());
         String token = jwtService.generateToken(details);
-        return new AuthResponse(token, user.getUsername(), user.getEmail());
+        return new AuthResponse(token, "Bearer", user.getUsername(), user.getEmail());
     }
 
     @Transactional
     public AuthResponse login(LoginRequest request) {
         Authentication auth = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
+                new UsernamePasswordAuthenticationToken(request.username(), request.password())
         );
         UserDetails details = (UserDetails) auth.getPrincipal();
         User user = userRepository.findByUsername(details.getUsername())
@@ -80,7 +80,6 @@ public class AuthService {
         user.setLastLogin(Instant.now());
         userRepository.save(user);
         String token = jwtService.generateToken(details);
-        return new AuthResponse(token, user.getUsername(), user.getEmail());
+        return new AuthResponse(token, "Bearer", user.getUsername(), user.getEmail());
     }
 }
-
