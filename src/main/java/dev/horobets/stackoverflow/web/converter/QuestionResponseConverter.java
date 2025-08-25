@@ -5,9 +5,8 @@ import dev.horobets.stackoverflow.web.dto.QuestionResponse;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.springframework.core.convert.converter.Converter;
-import org.springframework.stereotype.Component;
 
-@Component
+@Deprecated
 public class QuestionResponseConverter implements Converter<Question, QuestionResponse> {
     @Override
     public QuestionResponse convert(Question q) {
@@ -28,4 +27,3 @@ public class QuestionResponseConverter implements Converter<Question, QuestionRe
         );
     }
 }
-

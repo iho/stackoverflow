@@ -3,9 +3,8 @@ package dev.horobets.stackoverflow.web.converter;
 import dev.horobets.stackoverflow.model.tag.Tag;
 import dev.horobets.stackoverflow.web.dto.TagResponse;
 import org.springframework.core.convert.converter.Converter;
-import org.springframework.stereotype.Component;
 
-@Component
+@Deprecated
 public class TagResponseConverter implements Converter<Tag, TagResponse> {
     @Override
     public TagResponse convert(Tag t) {
@@ -19,4 +18,3 @@ public class TagResponseConverter implements Converter<Tag, TagResponse> {
         );
     }
 }
-

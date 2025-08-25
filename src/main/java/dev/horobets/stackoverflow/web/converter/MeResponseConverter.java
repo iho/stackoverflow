@@ -5,9 +5,8 @@ import dev.horobets.stackoverflow.web.dto.MeResponse;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.springframework.core.convert.converter.Converter;
-import org.springframework.stereotype.Component;
 
-@Component
+@Deprecated
 public class MeResponseConverter implements Converter<User, MeResponse> {
     @Override
     public MeResponse convert(User source) {
@@ -23,4 +22,3 @@ public class MeResponseConverter implements Converter<User, MeResponse> {
         );
     }
 }
-

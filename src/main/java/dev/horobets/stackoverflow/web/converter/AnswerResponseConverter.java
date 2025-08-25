@@ -3,9 +3,8 @@ package dev.horobets.stackoverflow.web.converter;
 import dev.horobets.stackoverflow.model.post.Answer;
 import dev.horobets.stackoverflow.web.dto.AnswerResponse;
 import org.springframework.core.convert.converter.Converter;
-import org.springframework.stereotype.Component;
 
-@Component
+@Deprecated
 public class AnswerResponseConverter implements Converter<Answer, AnswerResponse> {
     @Override
     public AnswerResponse convert(Answer a) {
@@ -22,4 +21,3 @@ public class AnswerResponseConverter implements Converter<Answer, AnswerResponse
         );
     }
 }
-
