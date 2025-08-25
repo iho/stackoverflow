@@ -43,10 +43,20 @@ public class SecurityConfig {
                 .exceptionHandling(e -> e.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        .requestMatchers(
+                                "/v3/api-docs/**",
+                                "/swagger-ui.html",
+                                "/swagger-ui/**"
+                        ).permitAll()
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/users/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/questions/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/answers/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/comments/*").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/questions/*/comments").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/answers/*/comments").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/votes/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/tags/**").permitAll()
                         .requestMatchers("/error").permitAll()
                         .anyRequest().authenticated()
                 )

@@ -1,6 +1,8 @@
 package dev.horobets.stackoverflow.repository;
 
 import dev.horobets.stackoverflow.model.post.Question;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -13,5 +15,6 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
 
     @Query("select coalesce(sum(q.views),0) from Question q where q.user.id = :userId")
     long sumViewsByUserId(@Param("userId") Long userId);
-}
 
+    Page<Question> findAllByTags_NameIgnoreCase(String name, Pageable pageable);
+}
