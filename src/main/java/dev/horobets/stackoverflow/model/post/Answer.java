@@ -9,9 +9,8 @@ import jakarta.validation.constraints.NotBlank;
 @Table(name = "answers")
 public class Answer extends BaseEntity {
 
-    @Lob
     @NotBlank
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "text")
     private String body;
 
     @Column(name = "vote_count", nullable = false)

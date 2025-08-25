@@ -6,6 +6,9 @@ import dev.horobets.stackoverflow.model.user.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -13,6 +16,8 @@ import java.util.Set;
 @Table(name = "questions", indexes = {
         @Index(name = "ix_questions_title", columnList = "title")
 })
+@SQLDelete(sql = "update questions set deleted = true where id = ? and version = ?")
+@Where(clause = "deleted = false")
 public class Question extends BaseEntity {
 
     @NotBlank
@@ -20,8 +25,7 @@ public class Question extends BaseEntity {
     @Column(nullable = false, length = 200)
     private String title;
 
-    @Lob
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "text")
     private String body;
 
     @Column(name = "vote_count", nullable = false)
@@ -35,6 +39,9 @@ public class Question extends BaseEntity {
 
     @Column(nullable = false)
     private boolean closed = false;
+
+    @Column(nullable = false)
+    private boolean deleted = false;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
@@ -69,4 +76,6 @@ public class Question extends BaseEntity {
     public void setAnswers(Set<Answer> answers) { this.answers = answers; }
     public Set<Tag> getTags() { return tags; }
     public void setTags(Set<Tag> tags) { this.tags = tags; }
+    public boolean isDeleted() { return deleted; }
+    public void setDeleted(boolean deleted) { this.deleted = deleted; }
 }

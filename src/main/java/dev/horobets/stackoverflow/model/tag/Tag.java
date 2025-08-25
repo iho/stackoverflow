@@ -19,7 +19,7 @@ public class Tag extends BaseEntity {
     @Column(nullable = false, length = 50, unique = true)
     private String name;
 
-    @Lob
+    @Column(columnDefinition = "text")
     private String description;
 
     @Column(name = "question_count", nullable = false)

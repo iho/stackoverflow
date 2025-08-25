@@ -17,7 +17,7 @@ public class Badge extends BaseEntity {
     @Column(nullable = false, length = 100, unique = true)
     private String name;
 
-    @Lob
+    @Column(columnDefinition = "text")
     private String description;
 
     @NotNull

@@ -10,8 +10,7 @@ import jakarta.validation.constraints.NotBlank;
 public class Comment extends BaseEntity {
 
     @NotBlank
-    @Lob
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "text")
     private String body;
 
     @Column(name = "vote_count", nullable = false)

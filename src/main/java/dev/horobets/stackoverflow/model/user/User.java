@@ -40,8 +40,7 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private int reputation = 1;
 
-    @Lob
-    @Column(name = "about")
+    @Column(name = "about", columnDefinition = "text")
     private String about;
 
     @Column(name = "last_login")
